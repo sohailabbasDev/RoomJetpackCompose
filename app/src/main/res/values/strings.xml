@@ -15,6 +15,7 @@
     <!--Icons-->
     <string name="edit_icon">"Edit"</string>
     <string name="delete_icon">Delete</string>
+    <string name="pin_icon">Pin</string>
     <!--Content Descriptions-->
     <string name="open_insert_book_dialog">"Open insert book dialog."</string>
     <string name="navigate_back">Navigate back</string>
@@ -29,4 +30,7 @@
     <string name="title_test">"Title Test"</string>
     <string name="author_test">"Author Test"</string>
     <string name="new_title_test">"New Title Test"</string>
+    <string name="pinned">pinned</string>
+    <string name="unpinned">unpinned</string>
+
 </resources>
