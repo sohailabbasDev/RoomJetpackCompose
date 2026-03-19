@@ -12,6 +12,8 @@ import ro.alexmamo.roomjetpackcompose.data.dao.BookDao
 import ro.alexmamo.roomjetpackcompose.data.network.BookDb
 import ro.alexmamo.roomjetpackcompose.data.repository.BookRepositoryImpl
 import ro.alexmamo.roomjetpackcompose.domain.repository.BookRepository
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -20,11 +22,19 @@ class AppModule {
     fun provideBookDb(
         @ApplicationContext
         context: Context
-    ) = Room.databaseBuilder(
-        context,
-        BookDb::class.java,
-        context.resources.getString(R.string.db_name)
-    ).build()
+    ): BookDb {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE books ADD COLUMN isPinned INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+        return Room.databaseBuilder(
+            context,
+            BookDb::class.java,
+            context.resources.getString(R.string.db_name)
+        ).addMigrations(MIGRATION_1_2).build()
+    }
 
     @Provides
     fun provideBookDao(

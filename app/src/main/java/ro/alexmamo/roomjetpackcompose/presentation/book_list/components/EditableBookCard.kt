@@ -17,6 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ro.alexmamo.roomjetpackcompose.R
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import ro.alexmamo.roomjetpackcompose.components.ActionButton
 import ro.alexmamo.roomjetpackcompose.core.AUTHOR_FIELD
 import ro.alexmamo.roomjetpackcompose.core.TITLE_FIELD
@@ -28,7 +33,8 @@ fun EditableBookCard(
     onUpdateBook: (Book) -> Unit,
     onEmptyBookField: (String) -> Unit,
     onNoBookUpdates: () -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    onPinBook: (Book) -> Unit
 ) {
     var updatedBook by remember { mutableStateOf(book) }
 
@@ -42,54 +48,65 @@ fun EditableBookCard(
         shape = MaterialTheme.shapes.small,
         elevation = 3.dp
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            TitleTextField(
-                title = updatedBook.title,
-                onUpdateTitle = { newTitle ->
-                    updatedBook = updatedBook.copy(
-                        title = newTitle
-                    )
-                }
-            )
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
-            AuthorTextField(
-                author = updatedBook.author,
-                onUpdateAuthor = { newAuthor ->
-                    updatedBook = updatedBook.copy(
-                        author = newAuthor
-                    )
-                }
-            )
-            Row {
-                ActionButton(
-                    onActionButtonClick = onCancel,
-                    resourceId = R.string.cancel_button
+            if (book.isPinned) {
+                Icon(
+                    imageVector = Icons.Default.PushPin,
+                    contentDescription = "Pinned",
+                    tint = Color.Red,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            }
+            Column {
+                TitleTextField(
+                    title = updatedBook.title,
+                    onUpdateTitle = { newTitle ->
+                        updatedBook = updatedBook.copy(
+                            title = newTitle
+                        )
+                    }
                 )
                 Spacer(
-                    modifier = Modifier.width(8.dp)
+                    modifier = Modifier.height(8.dp)
                 )
-                ActionButton(
-                    onActionButtonClick = {
-                        updatedBook.apply {
-                            if (title.isEmpty()) {
-                                onEmptyBookField(TITLE_FIELD)
-                            } else if (author.isEmpty()) {
-                                onEmptyBookField(AUTHOR_FIELD)
-                            } else {
-                                if (updatedBook != book) {
-                                    onUpdateBook(updatedBook)
+                AuthorTextField(
+                    author = updatedBook.author,
+                    onUpdateAuthor = { newAuthor ->
+                        updatedBook = updatedBook.copy(
+                            author = newAuthor
+                        )
+                    }
+                )
+                Row {
+                    ActionButton(
+                        onActionButtonClick = onCancel,
+                        resourceId = R.string.cancel_button
+                    )
+                    Spacer(
+                        modifier = Modifier.width(8.dp)
+                    )
+                    ActionButton(
+                        onActionButtonClick = {
+                            updatedBook.apply {
+                                if (title.isEmpty()) {
+                                    onEmptyBookField(TITLE_FIELD)
+                                } else if (author.isEmpty()) {
+                                    onEmptyBookField(AUTHOR_FIELD)
                                 } else {
-                                    onNoBookUpdates()
+                                    if (updatedBook != book) {
+                                        onUpdateBook(updatedBook)
+                                    } else {
+                                        onNoBookUpdates()
+                                    }
                                 }
                             }
-                        }
-                    },
-                    resourceId = R.string.update_button
-                )
+                        },
+                        resourceId = R.string.update_button
+                    )
+                }
             }
         }
     }

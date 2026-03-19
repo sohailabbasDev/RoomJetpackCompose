@@ -7,7 +7,7 @@ import ro.alexmamo.roomjetpackcompose.domain.model.Book
 
 @Database(
     entities = [Book::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class BookDb : RoomDatabase() {

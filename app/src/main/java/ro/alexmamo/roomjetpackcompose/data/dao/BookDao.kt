@@ -8,7 +8,7 @@ import ro.alexmamo.roomjetpackcompose.domain.model.Book
 
 @Dao
 interface BookDao {
-    @Query("SELECT * FROM $BOOK_TABLE ORDER BY id ASC")
+    @Query("SELECT * FROM $BOOK_TABLE ORDER BY isPinned DESC, id ASC")
     fun getBookList(): Flow<List<Book>>
 
     @Query("SELECT * FROM $BOOK_TABLE WHERE id = :id")

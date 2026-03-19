@@ -82,4 +82,14 @@ class BookListViewModel @Inject constructor(
     fun resetDeleteBookState() {
         _deleteBookState.value = Response.Idle
     }
+
+    fun pinBook(book: Book) = viewModelScope.launch {
+        try {
+            _updateBookState.value = Response.Loading
+            val newBook = book.copy(isPinned = !book.isPinned)
+            _updateBookState.value = Response.Success(repo.updateBook(newBook))
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
 }

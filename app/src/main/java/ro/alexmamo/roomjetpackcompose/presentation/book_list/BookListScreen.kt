@@ -90,6 +90,9 @@ fun BookListScreen(
                                 snackbarHostState = snackbarHostState,
                                 message = resources.getString(R.string.no_book_updates_message)
                             )
+                        },
+                        onPinBook = { book ->
+                            viewModel.pinBook(book)
                         }
                     )
                 }

@@ -10,7 +10,8 @@ data class Book(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val title: String,
-    val author: String
+    val author: String,
+    val isPinned: Boolean = false
 )
 
 fun Book.toBookDetails() = BookDetails(
